@@ -1,26 +1,37 @@
 #!/usr/bin/env python
-import array as a
 
-def findMax(arr, n, k = 0):
-    if(n < 2): 
+def calculateMin(arr, left, right):
+    min = arr[left]
+    for i in range(left, right+1):
+        if arr[i] < min:
+            min = arr[i]
+    return min
+
+def calculateMax(arr, left, right):
+    max = arr[left]
+    for i in range(left, right+1):
+        if arr[i] > max:
+            max = arr[i]
+    return max 
+
+def findMaxDifference(arr: list, left, right):
+    if left >= right:
         return 0
-    if(n == 2):
-        return arr[1] - arr[0]
-    max_num = 0
-    for i in range(k, len(arr)):
-        diff = arr[i] - arr[k]
-        if (diff > max_num):
-            max_num = diff
-    print('current max is', max_num)
-    return max(max_num, findMax(arr, n-1, k+1))
+
+    mid = (left + right)//2
+
+    leftArray = findMaxDifference(arr, left, mid)
+    rightArray = findMaxDifference(arr, mid+1, right)
+
+    diff = max(arr[mid+1:]) - min(arr[left:mid+1])
+    temp = max(max(leftArray, rightArray), diff)
+    return temp
+
 
 def main():
     n = int(input())
-    arr = a.array("i", [int(x) for x in input().split()])
-    print(findMax(arr, n))
+    arr = [int(x) for x in input().split()]
+    print(findMaxDifference(arr, 0, n-1))
 
 if __name__ == "__main__":
     main()
-
-#6
-#8 7 4 3 2 1
